@@ -124,6 +124,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .data-window .live-dot { width: 6px; height: 6px; }
 .data-divider { width: 1px; height: 12px; margin: 0 2px; background: #383a33; }
 .filter-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 30px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.filter-row.is-saved-view .category-tabs { opacity: .45; }
+.filter-row.is-saved-view .category-tabs:hover { opacity: .75; }
 .category-tabs { display: flex; align-items: center; gap: 7px; overflow-x: auto; scrollbar-width: none; }
 .category-tabs::-webkit-scrollbar { display: none; }
 .category-tab { flex-shrink: 0; padding: 8px 12px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #92958b; font-size: 11px; cursor: pointer; transition: all .18s; }

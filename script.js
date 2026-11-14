@@ -47,6 +47,31 @@ const dialogContent = document.querySelector('#dialog-content');
 const intentSummary = document.querySelector('#intent-summary');
 const dateWindow = document.querySelector('#date-window');
 const themeToggle = document.querySelector('#theme-toggle');
+const filterRow = document.querySelector('.filter-row');
+const emptyTitle = emptyState.querySelector('h3');
+const emptyText = emptyState.querySelector('p');
+const emptyButton = document.querySelector('#reset-search');
+
+const EMPTY_COPY = {
+  search: {
+    title: '아직 발견된 프로젝트가 없어요',
+    text: '다른 키워드나 분야를 선택해 다시 검색해 보세요.',
+    button: '전체 프로젝트 보기',
+  },
+  saved: {
+    title: '저장한 기술이 아직 없어요',
+    text: '둘러보기에서 마음에 드는 프로젝트의 ♡ 버튼을 누르면 이곳에 모아 볼 수 있어요.',
+    button: '전체 프로젝트 둘러보기',
+  },
+};
+
+function applyEmptyState(mode) {
+  const copy = EMPTY_COPY[mode];
+  if (!copy) return;
+  emptyTitle.textContent = copy.title;
+  emptyText.textContent = copy.text;
+  emptyButton.textContent = copy.button;
+}
 
 function setTheme(isDark, persist = true) {
   document.body.classList.toggle('theme-dark', isDark);
@@ -242,6 +267,12 @@ function formatPeriod(days) {
 }
 
 function updateIntentSummary() {
+  if (state.savedOnly) {
+    const total = getSaved().length;
+    intentSummary.textContent = `저장한 기술 전체 ${total}개 · 검색어와 분야 필터 없이 표시`;
+    dateWindow.textContent = '저장한 기술';
+    return;
+  }
   const mode = state.periodMode === 'pushed' ? '최근 활동' : '새로 생성';
   const topic = state.query || (state.category === 'all' ? '전체 분야' : categories[state.category].label);
   const sort = state.sort === 'updated' ? '최근 업데이트 순' : state.sort === 'forks' ? '포크 수 많은 순' : '스타 수 많은 순';
@@ -282,23 +313,19 @@ function translateSearchQuery(query) {
 async function searchRepositories({ append = false } = {}) {
   if (state.loading) return;
   if (state.savedOnly) {
-    const saved = getSaved();
-    const query = state.query.trim().toLowerCase();
-    const filtered = saved.filter((item) => {
-      const searchTerms = translateSearchQuery(query).toLowerCase().split(/\s+/).filter(Boolean);
-      const haystack = `${item.full_name} ${item.description || ''} ${(item.topics || []).join(' ')}`.toLowerCase();
-      const matchesText = !query || searchTerms.every((term) => haystack.includes(term));
-      const matchesCategory = state.category === 'all' || getGuide(item).key === state.category;
-      return matchesText && matchesCategory;
-    }).sort((left, right) => (right[state.sort === 'updated' ? 'updated_at' : state.sort === 'forks' ? 'forks_count' : 'stargazers_count'] || 0) > (left[state.sort === 'updated' ? 'updated_at' : state.sort === 'forks' ? 'forks_count' : 'stargazers_count'] || 0) ? 1 : -1);
-    state.items = filtered;
-    renderRepositories(filtered);
-    resultsLabel.innerHTML = `저장한 프로젝트 <strong>${filtered.length}</strong>개`;
-    loadMoreButton.hidden = true;
+    // 저장한 기술 보기는 검색어·분야 필터를 적용하지 않고 저장된 전체 목록을 보여준다.
+    const saved = getSaved().slice().sort(compareSavedItems);
+    state.items = saved;
+    updateIntentSummary();
+    applyEmptyState('saved');
     clearStatus();
+    renderRepositories(saved);
+    resultsLabel.innerHTML = `저장한 프로젝트 <strong>${saved.length}</strong>개`;
+    loadMoreButton.hidden = true;
     return;
   }
 
+  applyEmptyState('search');
   const requestId = ++state.requestId;
   state.loading = true;
   clearStatus();
@@ -393,10 +420,17 @@ function toggleSaved(repositoryId) {
   }
 }
 
+function compareSavedItems(left, right) {
+  const key = state.sort === 'updated' ? 'updated_at' : state.sort === 'forks' ? 'forks_count' : 'stargazers_count';
+  if (key === 'updated_at') return String(right.updated_at || '').localeCompare(String(left.updated_at || ''));
+  return (Number(right[key]) || 0) - (Number(left[key]) || 0);
+}
+
 function runNewSearch() {
   state.savedOnly = false;
   savedToggle.classList.remove('is-active');
   savedToggle.setAttribute('aria-pressed', 'false');
+  filterRow?.classList.remove('is-saved-view');
   updateIntentSummary();
   state.requestId += 1;
   state.loading = false;
@@ -434,6 +468,10 @@ document.querySelectorAll('.category-tab').forEach((button) => {
 
 document.querySelector('#sort-select').addEventListener('change', (event) => {
   state.sort = event.target.value;
+  if (state.savedOnly) {
+    searchRepositories();
+    return;
+  }
   runNewSearch();
 });
 
@@ -446,6 +484,7 @@ savedToggle.addEventListener('click', () => {
   state.savedOnly = !state.savedOnly;
   savedToggle.classList.toggle('is-active', state.savedOnly);
   savedToggle.setAttribute('aria-pressed', String(state.savedOnly));
+  filterRow?.classList.toggle('is-saved-view', state.savedOnly);
   if (state.savedOnly) {
     state.requestId += 1;
     state.loading = false;
