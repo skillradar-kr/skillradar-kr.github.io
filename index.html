@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#e8eef4">
+    <meta name="description" content="하고 싶은 일을 자연어로 검색하고, 나에게 맞는 기술과 오픈소스 프로젝트를 쉽게 발견하세요.">
+    <title>SkillRadar — 다음에 배울 기술을 발견하세요</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="SkillRadar 홈">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>skill<span class="brand-light">radar</span></span>
+        </a>
+        <nav class="main-nav" aria-label="주요 메뉴">
+          <a class="nav-link active" href="#goals">목표로 찾기</a>
+          <a class="nav-link" href="#trending">추천 프로젝트</a>
+          <a class="nav-link" href="#about">이용 안내</a>
+        </nav>
+        <div class="header-actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="야간 모드로 전환" aria-pressed="false" title="야간 모드">
+            <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.2 15.1A8.7 8.7 0 0 1 8.9 3.8 8.8 8.8 0 1 0 20.2 15.1Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <button class="saved-nav" id="saved-toggle" type="button" aria-pressed="false">
+            <span aria-hidden="true">♡</span> 저장한 기술 <span class="saved-count" id="saved-count">0</span>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" id="discover">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="live-dot"></span> 내 일과 생활에 도움 되는 새로운 기술</div>
+            <h1>내게 필요한 기술,<br><span class="headline-accent">쉽게 찾아보세요.</span></h1>
+            <p class="hero-description">반복 업무 줄이기부터 홈페이지 만들기까지.<br class="desktop-break"> 나에게 맞는 도구와 기술을 쉬운 설명으로 만나보세요.</p>
+            <form class="search-form" id="search-form" role="search">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <label class="sr-only" for="search-input">기간, 분야, 개수를 포함한 자연어 검색</label>
+              <input id="search-input" type="search" placeholder="예: 최근 1개월 AI 스킬" autocomplete="off">
+              <kbd>↵</kbd>
+              <button type="submit" class="search-button">찾아보기 <span aria-hidden="true">↗</span></button>
+            </form>
+            <div class="quick-searches">
+              <span class="quick-label">기간·분야·개수를 말하듯 검색하거나 눌러보세요</span>
+              <div class="quick-search-list" role="group" aria-label="추천 검색 바로가기">
+                <button type="button" data-query="최근 1개월 베스트 20 스킬"><span class="quick-icon fire" aria-hidden="true">🔥</span><span class="quick-name">최근 1개월 베스트 20</span><span class="quick-arrow" aria-hidden="true">↗</span></button>
+                <button type="button" data-query="최근 1개월 AI 베스트 20"><span class="quick-icon brain" aria-hidden="true">✺</span><span class="quick-name">최근 1개월 AI 베스트 20</span><span class="quick-arrow" aria-hidden="true">↗</span></button>
+                <button type="button" data-query="최근 3일 그래픽 관련 스킬"><span class="quick-icon art" aria-hidden="true">✦</span><span class="quick-name">최근 3일 그래픽</span><span class="quick-arrow" aria-hidden="true">↗</span></button>
+                <button type="button" data-query="이번 주 새로 만들어진 자동화 도구"><span class="quick-icon new" aria-hidden="true">↻</span><span class="quick-name">이번 주 업무 자동화</span><span class="quick-arrow" aria-hidden="true">↗</span></button>
+                <button type="button" data-query="최근 1개월 홈페이지 웹사이트 만들기"><span class="quick-icon web" aria-hidden="true">◫</span><span class="quick-name">최근 1개월 홈페이지</span><span class="quick-arrow" aria-hidden="true">↗</span></button>
+              </div>
+            </div>
+            <div class="hero-footnote"><span class="sparkle">✳</span> 어려운 용어보다 <strong>내게 어떤 도움이 되는지</strong> 먼저 알려드려요.</div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="orbit orbit-three"></div>
+            <div class="orbit-core"><span>SR</span><i></i></div>
+            <div class="orbit-node node-top"><span class="node-icon">✳</span><span>일 반복 줄이기</span></div>
+            <div class="orbit-node node-right"><span class="node-icon">⌘</span><span>문서 쉽게 정리</span></div>
+            <div class="orbit-node node-bottom"><span class="node-icon">◈</span><span>홈페이지 만들기</span></div>
+            <div class="orbit-node node-left"><span class="node-icon">⟡</span><span>AI 도우미 활용</span></div>
+            <div class="art-caption"><span class="live-dot"></span> FIND WHAT HELPS YOU</div>
+          </div>
+        </section>
+
+        <section class="goals-section" id="goals">
+          <div class="goals-heading">
+            <div>
+              <div class="section-kicker">START WITH YOUR GOAL</div>
+              <h2>무엇을 해보고 싶으세요<span class="heading-dot">?</span></h2>
+            </div>
+            <p>목표를 고르면 관련 기술과 실제 프로젝트를 찾아드려요.</p>
+          </div>
+          <div class="goal-grid">
+            <button class="goal-card" type="button" data-query="엑셀 반복 업무 자동화">
+              <span class="goal-icon">↻</span><span class="goal-copy"><strong>반복 업무 줄이기</strong><small>매일 하는 일을 더 간단하게</small></span><span class="goal-arrow">↗</span>
+            </button>
+            <button class="goal-card" type="button" data-query="문서 요약 정리">
+              <span class="goal-icon violet">▤</span><span class="goal-copy"><strong>문서·자료 정리하기</strong><small>긴 글과 자료를 빠르게 파악</small></span><span class="goal-arrow">↗</span>
+            </button>
+            <button class="goal-card" type="button" data-query="홈페이지 웹사이트 만들기">
+              <span class="goal-icon blue">◫</span><span class="goal-copy"><strong>홈페이지 만들어보기</strong><small>아이디어를 웹으로 표현하기</small></span><span class="goal-arrow">↗</span>
+            </button>
+            <button class="goal-card" type="button" data-query="AI 도우미 만들기">
+              <span class="goal-icon pink">✳</span><span class="goal-copy"><strong>나만의 AI 도우미</strong><small>내 일에 맞는 AI 기능 알아보기</small></span><span class="goal-arrow">↗</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="discovery-section" id="trending">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">LIVE OPEN-SOURCE SIGNALS</div>
+              <h2>요청에 맞는 프로젝트를 찾았어요<span class="heading-dot">.</span></h2>
+              <p class="section-description">기간·분야·개수를 읽어 검색하고, 실제 GitHub 자료를 보여드려요.</p>
+            </div>
+            <div class="data-window"><span class="live-dot"></span><span id="date-window">최근 1년 기준</span><span class="data-divider"></span><span>GitHub 자료</span></div>
+          </div>
+
+          <div class="filter-row">
+            <div class="category-tabs" role="group" aria-label="관심 있는 목표">
+              <button class="category-tab selected" type="button" data-category="all">모든 프로젝트</button>
+              <button class="category-tab" type="button" data-category="automation">업무 자동화</button>
+              <button class="category-tab" type="button" data-category="docs">문서·자료 정리</button>
+              <button class="category-tab" type="button" data-category="web">홈페이지 만들기</button>
+              <button class="category-tab" type="button" data-category="ai">AI 도우미</button>
+            </div>
+            <label class="sort-control">
+              <span>보기 기준</span>
+              <select id="sort-select" aria-label="정렬 기준">
+                <option value="stars">스타 수 많은 순</option>
+                <option value="updated">최근 업데이트 순</option>
+                <option value="forks">포크 수 많은 순</option>
+              </select>
+              <span class="select-chevron" aria-hidden="true">⌄</span>
+            </label>
+          </div>
+
+          <div class="results-meta">
+            <p id="results-label" aria-live="polite">도움이 될 프로젝트를 찾아보고 있어요<span class="loading-dots">...</span></p>
+            <span class="results-hint" id="intent-summary"></span>
+          </div>
+
+          <div class="results-grid" id="results-grid" aria-live="polite" aria-busy="true"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <span class="empty-icon">⌕</span>
+            <h3>아직 발견된 프로젝트가 없어요</h3>
+            <p>다른 키워드나 분야를 선택해 다시 검색해 보세요.</p>
+            <button type="button" id="reset-search">전체 프로젝트 보기</button>
+          </div>
+          <div class="error-state" id="error-state" hidden></div>
+          <div class="load-more-wrap"><button class="load-more" id="load-more" type="button" hidden>프로젝트 더 보기 <span aria-hidden="true">↓</span></button></div>
+          <p class="source-note" id="source-note"><span>ⓘ</span> 기간은 프로젝트 생성일 또는 최근 활동일 기준으로 검색해요. “베스트”는 현재 누적 스타 수 기준이며, 과거별 증가량은 GitHub에서 제공하지 않아 실제 급상승 순위와 다를 수 있어요.</p>
+        </section>
+
+        <section class="how-section" id="about">
+          <div class="how-intro">
+            <div class="section-kicker">A SIMPLE WAY TO GET STARTED</div>
+            <h2>처음이라도<br>이렇게 시작해요.</h2>
+            <p>전문가가 아니어도 괜찮아요. 내 목표를 고르고, 쉬운 설명을 읽고, 마음에 드는 프로젝트부터 둘러보세요.</p>
+          </div>
+          <div class="signal-list">
+            <article class="signal-item">
+              <span class="signal-number">01</span>
+              <div><h3>먼저, 하고 싶은 일을 고르세요</h3><p>업무 자동화나 문서 정리처럼 익숙한 목표에서 시작해요.</p></div>
+              <span class="signal-icon" aria-hidden="true">✳</span>
+            </article>
+            <article class="signal-item">
+              <span class="signal-number">02</span>
+              <div><h3>쉬운 설명으로 쓰임새를 살펴보세요</h3><p>어떤 문제에 활용할 수 있는지 먼저 확인할 수 있어요.</p></div>
+              <span class="signal-icon" aria-hidden="true">↗</span>
+            </article>
+            <article class="signal-item">
+              <span class="signal-number">03</span>
+              <div><h3>원하면 원본 프로젝트도 확인하세요</h3><p>GitHub에서 기능, 사용법, 필요한 환경을 직접 살펴볼 수 있어요.</p></div>
+              <span class="signal-icon" aria-hidden="true">⌘</span>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a class="brand footer-brand" href="#"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span><span>skill<span class="brand-light">radar</span></span></a>
+        <span>개발자의 다음 관심사를 발견하는 레이더.</span>
+        <a href="https://github.com" target="_blank" rel="noreferrer">데이터 제공: GitHub <span aria-hidden="true">↗</span></a>
+      </footer>
+    </div>
+
+    <dialog class="detail-dialog" id="detail-dialog" aria-labelledby="dialog-title">
+      <button class="dialog-close" type="button" aria-label="닫기">×</button>
+      <div id="dialog-content"></div>
+    </dialog>
+  </body>
+</html>
